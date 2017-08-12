@@ -17,12 +17,12 @@ public class getPremData {
         //Read InputStream
         BufferedReader data = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         //Temp string holder
-        String inputLine;
-        StringBuilder a = new StringBuilder();
+        String inputLine = "";
+        String returnString = "";
         while ((inputLine = data.readLine()) != null){
-        	a.append(inputLine);
+        	returnString += inputLine + "\n";
         }
         data.close();
-        return a.toString();
+        return returnString;
     }
 }
