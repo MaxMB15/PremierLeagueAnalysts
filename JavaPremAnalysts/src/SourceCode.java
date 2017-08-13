@@ -1,31 +1,64 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class SourceCode {
-	//The point of this class is to Handle the output recieved from source code from
-	//html documents
+	//The point of this class is to Handle the output recieved from source code from html documents
 	
 	private String htmlCode = "NULL";
 	private String[] htmlCodeArray = new String[0];
-	public SourceCode(String url){
-		htmlCode = url;
+	public SourceCode(URL url){
+		try {
+			htmlCode = getUrlSourceCode(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		codeToArray();
+	}
+	public SourceCode(String code){
+		htmlCode = code;
 		codeToArray();
 	}
 	
-	//will get the outer most nodes (so not including nodes with the same name inside 
-	//of the node) and make an arrayList of source code
+	//will get the outer most nodes (so not including nodes with the same name inside of the node) and make an 
+	//arrayList of source code
 	public ArrayList<SourceCode> getNodesByName(String tag){
 		//blank arrayList used to fill up for the return
 		ArrayList<SourceCode> returnList = new ArrayList<SourceCode>();
-		String htmlLine = "";
+		String htmlCodeTemp = "";
 		//depth must be zero to stop appending lines of html code
 		int depth = 0;
-		
-		while()
+		//go through code
+		for(int i = 0;i<htmlCodeArray.length;i++){
+			if(htmlCodeArray[i].contains("<"+tag)){
+				while(!(htmlCodeArray[i].contains("</"+tag) && depth == 0)){
+					//if infinite loop throw format exception
+					if(i<htmlCodeArray.length-1){
+						new SourceCodeFormatException();
+					}
+					//if there is an inside node
+					if(htmlCodeArray[i].contains("</"+tag)){
+						depth--;
+					}
+					else if(htmlCodeArray[i].contains("<"+tag)){
+						depth++;
+					}
+					//add code to temp
+					htmlCodeTemp+=htmlCodeArray[i];
+					i++;
+				}
+				returnList.add(new SourceCode(htmlCodeTemp));
+				//clear for next find
+				htmlCodeTemp = "";
+			}
+			
+			
+			
+		}
 		
 		
 		return returnList;
@@ -50,9 +83,8 @@ public class SourceCode {
 	
 	
 	
-	private String getUrlSourceCode(String url) throws IOException {
-		//Make a new URL object and make a connection
-        URL WebPage = new URL(url);
+	private String getUrlSourceCode(URL WebPage) throws IOException {
+		//Make a connection with URL Object
         URLConnection connection = WebPage.openConnection();
         
         //Read InputStream
@@ -72,5 +104,15 @@ public class SourceCode {
 		public SourceCodeFormatException(){
 			super("The html Document is invalid!");
 		}
+	}
+	
+	//So no need to import another library
+	static URL getURL(String url){
+		try {
+			return new URL(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
