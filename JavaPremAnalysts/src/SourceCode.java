@@ -30,6 +30,7 @@ public class SourceCode {
 		//blank arrayList used to fill up for the return
 		ArrayList<SourceCode> returnList = new ArrayList<SourceCode>();
 		String htmlCodeTemp = "";
+		boolean copying = false;
 		//depth must be zero to stop appending lines of html code
 		int depth = 0;
 		//go through code
@@ -43,17 +44,24 @@ public class SourceCode {
 					//if there is an inside node
 					if(htmlCodeArray[i].contains("</"+tag)){
 						depth--;
+						//if SourceCode is only one line
+						if(depth<0){
+							htmlCodeTemp+=htmlCodeArray[i];
+							break;
+						}
 					}
-					else if(htmlCodeArray[i].contains("<"+tag)){
+					if(htmlCodeArray[i].contains("<"+tag)&&copying){
 						depth++;
 					}
 					//add code to temp
-					htmlCodeTemp+=htmlCodeArray[i];
+					htmlCodeTemp+=htmlCodeArray[i]+"\n";
 					i++;
+					copying = true;
 				}
 				returnList.add(new SourceCode(htmlCodeTemp));
 				//clear for next find
 				htmlCodeTemp = "";
+				copying = false;
 			}
 			
 			
@@ -98,6 +106,19 @@ public class SourceCode {
         data.close();
         return returnString;
     }
+	public String toString(){
+		int i = 0;
+		String returnString = "";
+		for(String s: htmlCodeArray){
+			returnString += i+".\t"+s+"\n";
+			i++;
+		}
+		returnString += "\n";
+		return returnString;
+	}
+	
+	
+	
 	
 	@SuppressWarnings("serial")
 	class SourceCodeFormatException extends Exception{
@@ -115,4 +136,5 @@ public class SourceCode {
 		}
 		return null;
 	}
+	
 }
