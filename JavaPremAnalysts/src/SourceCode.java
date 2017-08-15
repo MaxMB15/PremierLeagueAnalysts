@@ -116,6 +116,19 @@ public class SourceCode {
 		returnString += "\n";
 		return returnString;
 	}
+	public String getAttributeValue(String attribute){
+		for(String line : htmlCodeArray){
+			if(line.contains(attribute+"=")){
+				for(String s : line.split(" ")){
+					if(s.contains(attribute+"=")){
+						return s.split("=")[1];
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	
 	
 	
