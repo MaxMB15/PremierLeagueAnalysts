@@ -128,7 +128,23 @@ public class SourceCode {
 		}
 		return null;
 	}
-	
+	public ArrayList<String> getTextByTag(String tag){
+		//return List
+		ArrayList<String> returnList = new ArrayList<String>();
+		//find the tag and then cut out text info
+		for(String line : htmlCodeArray){
+			if(line.contains("<"+tag)){
+				returnList.add(line.split("<"+tag)[1].split(">")[1].split("<")[0]);
+			}
+		}
+		//If no results
+		if(returnList.isEmpty()){
+			return null;
+		}
+		else{
+			return returnList;
+		}
+	}
 	
 	
 	
