@@ -136,6 +136,9 @@ public class SourceCode {
 		for(String line : htmlCodeArray){
 			if(line.contains("<"+tag)){
 				returnList.add(line.split("<"+tag)[1].split(">")[1].split("<")[0]);
+				if(returnList.get(returnList.size()-1).isEmpty()){
+					returnList.remove(returnList.size()-1);
+				}
 			}
 		}
 		//If no results
