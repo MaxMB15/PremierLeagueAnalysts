@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class SourceCode {
+	
 	//The point of this class is to Handle the output received from source code from html documents
 	
 	private String htmlCode = "NULL";
